@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Looom.Shop — Handloom & Ikkat</title>
+
+<style>
+  :root{
+    --brand:#00b4cc;        /* primary accent */
+    --brand-2:#ff6b6b;      /* secondary accent */
+    --text:#222;
+    --muted:#6b7280;
+    --bg:#ffffff;
+    --card:#f8fafc;
+    --radius:14px;
+    --shadow:0 8px 24px rgba(0,0,0,.08);
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);}
+
+  /* Top promo */
+  .promo{
+    background:var(--brand);
+    color:#fff;
+    text-align:center;
+    padding:10px 12px;
+    font-weight:700;
+    font-size:14px;
+    position:relative;
+  }
+  .promo span{white-space:nowrap;display:inline-block;animation:slide 18s linear infinite}
+  @keyframes slide{
+    0%{transform:translateX(100%)}
+    100%{transform:translateX(-100%)}
+  }
+
+  /* Header */
+  .header{
+    position:sticky;top:0;z-index:20;background:#fff;
+    box-shadow:0 2px 12px rgba(0,0,0,.06);
+  }
+  .header-inner{
+    max-width:1200px;margin:auto;padding:12px 16px;display:flex;align-items:center;gap:12px;
+  }
+  .logo{font-weight:900;letter-spacing:.5px;color:var(--brand);font-size:22px}
+  .nav{margin-left:auto;display:flex;gap:16px;align-items:center}
+  .nav a{color:var(--text);text-decoration:none;font-weight:600;font-size:14px}
+  .nav a:hover{color:var(--brand)}
+  .search{
+    flex:1 1 300px;max-width:420px;display:none;
+  }
+  .search form{display:flex;background:var(--card);border-radius:999px;overflow:hidden;border:1px solid #e5e7eb}
+  .search input{flex:1;padding:10px 14px;border:0;background:transparent;outline:none}
+  .search button{padding:10px 14px;border:0;background:var(--brand);color:#fff;font-weight:700;cursor:pointer}
+  .icons{display:flex;gap:10px;font-size:20px}
+  .hamburger{display:none;font-size:22px;cursor:pointer}
+
+  /* Mobile nav (simple) */
+  #nav-toggle{display:none}
+  .nav-drawer{
+    display:none;background:#fff;border-top:1px solid #eee
+  }
+  .nav-drawer a{display:block;padding:14px 16px;border-bottom:1px solid #f1f5f9;text-decoration:none;color:var(--text);font-weight:600}
+  .nav-drawer a:hover{background:#f8fafc;color:var(--brand)}
+
+  /* Hero slider (CSS only) */
+  .hero{
+    position:relative;overflow:hidden
+  }
+  .slides{
+    display:flex;width:300%;animation:carousel 18s infinite;
+  }
+  .slide{
+    width:100%;height:min(68vh,520px);display:flex;align-items:center;justify-content:center;position:relative;color:#fff;
+  }
+  .slide::after{
+    content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,.35));
+  }
+  .slide-content{
+    position:relative;z-index:1;text-align:center;padding:0 16px;max-width:900px
+  }
+  .slide h1{font-size:clamp(28px,5vw,48px);margin:0 0 10px}
+  .slide p{font-size:clamp(14px,2.4vw,18px);opacity:.95;margin:0 0 18px}
+  .btn{
+    display:inline-block;background:var(--brand);color:#fff;text-decoration:none;padding:12px 20px;border-radius:999px;font-weight:800;
+    box-shadow:0 6px 18px rgba(0,180,204,.35)
+  }
+  .btn.alt{background:#111}
+  @keyframes carousel{
+    0%,27%{transform:translateX(0)}
+    33%,60%{transform:translateX(-100%)}
+    66%,94%{transform:translateX(-200%)}
+    100%{transform:translateX(0)}
+  }
+
+  /* Section base */
+  .section{max-width:1200px;margin:auto;padding:28px 16px}
+  .section h2{font-size:clamp(20px,3.5vw,28px);margin:8px 0 18px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:12px}
+
+  /* Category grid */
+  .cat-grid{
+    display:grid;gap:14px;
+    grid-template-columns:repeat(2,1fr);
+  }
+  @media(min-width:640px){.cat-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(min-width:900px){.cat-grid{grid-template-columns:repeat(4,1fr)}}
+  .cat{
+    position:relative;border-radius:var(--radius);overflow:hidden;background:#ddd;box-shadow:var(--shadow)
+  }
+  .cat img{width:100%;height:180px;object-fit:cover;display:block}
+  .cat b{
+    position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,.6);color:#fff;padding:8px 12px;border-radius:999px;font-size:14px
+  }
+
+  /* Product grid */
+  .product-grid{
+    display:grid;gap:16px;grid-template-columns:repeat(2,1fr)
+  }
+  @media(min-width:780px){.product-grid{grid-template-columns:repeat(4,1fr)}}
+  .card{
+    background:#fff;border-radius:16px;overflow:hidden;border:1px solid #eef2f7;box-shadow:0 4px 14px rgba(0,0,0,.04)
+  }
+  .card img{width:100%;height:220px;object-fit:cover;display:block}
+  .card .info{padding:12px}
+  .title{font-weight:700}
+  .price{color:var(--brand-2);font-weight:900;margin-top:6px}
+  .add{margin-top:10px;width:100%;border:0;background:var(--brand);color:#fff;padding:10px 12px;border-radius:10px;font-weight:800;cursor:pointer}
+
+  /* Offer band */
+  .offer{
+    background:linear-gradient(135deg,var(--brand),#36d1dc);color:#fff;border-radius:18px;padding:22px;display:flex;flex-wrap:wrap;align-items:center;gap:12px
+  }
+  .offer h3{margin:0;font-size:clamp(18px,3vw,24px)}
+  .offer .cta{margin-left:auto}
+  .offer .cta a{background:#111;padding:10px 16px;border-radius:999px;color:#fff;text-decoration:none;font-weight:800}
+
+  /* Testimonials (scroll-snap) */
+  .testimonials{
+    display:grid;gap:12px
+  }
+  .rail{
+    display:flex;gap:12px;overflow:auto;scroll-snap-type:x mandatory;padding-bottom:6px
+  }
+  .tcard{
+    min-width:280px;scroll-snap-align:center;background:#fff;border:1px solid #eef2f7;border-radius:16px;padding:16px;box-shadow:0 4px 14px rgba(0,0,0,.04)
+  }
+  .tname{font-weight:800;margin-top:10px}
+
+  /* Instagram grid */
+  .ig{
+    display:grid;gap:8px;grid-template-columns:repeat(3,1fr)
+  }
+  .ig img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px}
+
+  /* Footer */
+  .footer{
+    background:#0f172a;color:#cbd5e1;margin-top:24px
+  }
+  .footer-inner{
+    max-width:1200px;margin:auto;padding:28px 16px;display:grid;gap:18px;
+    grid-template-columns:1fr;
+  }
+  @media(min-width:760px){.footer-inner{grid-template-columns:2fr 1fr 1fr 1fr}}
+  .footer h4{color:#fff;margin:0 0 8px}
+  .footer a{color:#cbd5e1;text-decoration:none;display:block;padding:4px 0}
+  .copy{border-top:1px solid #1f2937;text-align:center;padding:12px 16px;color:#94a3b8;font-size:13px}
+  
+  /* Make search visible on ≥ md */
+  @media(min-width:900px){.search{display:block}}
+
+  /* Mobile nav toggle */
+  @media(max-width:900px){
+    .nav{display:none}
+    .hamburger{display:block;margin-left:auto}
+    #nav-toggle:checked ~ .nav-drawer{display:block}
+  }
+</style>
+</head>
+<body>
+
+  <!-- Announcement -->
+  <div class="promo">
+    <span>🔥 AADI SALE LIVE — 5%–15% OFF • Free Shipping ₹999+ • Use Code: AADI10</span>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-inner">
+      <div class="logo">Looom.Shop</div>
+
+      <div class="search">
+        <form action="#" method="get">
+          <input type="search" name="s" placeholder="Search Ikkat, fabrics, sarees…" aria-label="Search">
+          <button type="submit">Search</button>
+        </form>
+      </div>
+
+      <div class="icons" aria-label="User menu">
+        <span title="Account">👤</span>
+        <span title="Wishlist">❤️</span>
+        <span title="Cart">🛒</span>
+      </div>
+
+      <label class="hamburger" for="nav-toggle" aria-label="Open menu">☰</label>
+      <input type="checkbox" id="nav-toggle" />
+
+    </div>
+    <nav class="nav-drawer">
+      <a href="#">Home</a>
+      <a href="#">New Arrivals</a>
+      <a href="#">Ikkat Sets</a>
+      <a href="#">Fabrics</a>
+      <a href="#">Bedsheets</a>
+      <a href="#">Contact</a>
+    </nav>
+
+    <div class="header-inner" style="display:none" aria-hidden="true"></div>
+  </div>
+
+  <!-- Hero Slider -->
+  <section class="hero">
+    <div class="slides">
+      <div class="slide" style="background:url('https://images.unsplash.com/photo-1544441893-675973e31985?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;">
+        <div class="slide-content">
+          <h1>Handwoven Ikkat Collections</h1>
+          <p>From looms to your wardrobe — premium fabrics, ethical sourcing.</p>
+          <a class="btn" href="#">Shop Now</a>
+        </div>
+      </div>
+      <div class="slide" style="background:url('https://images.unsplash.com/photo-1610041516063-7a5e0b95564b?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;">
+        <div class="slide-content">
+          <h1>Fresh Drapes for Festive Days</h1>
+          <p>Vibrant sarees & dress materials with timeless motifs.</p>
+          <a class="btn alt" href="#">Browse Sarees</a>
+        </div>
+      </div>
+      <div class="slide" style="background:url('https://images.unsplash.com/photo-1516826957135-700dedea698c?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;">
+        <div class="slide-content">
+          <h1>Everyday Comfort. Elevated.</h1>
+          <p>Soft cottons & breathable blends — perfect for Indian summers.</p>
+          <a class="btn" href="#">Explore Fabrics</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="section">
+    <h2>Shop by Category</h2>
+    <p class="sub">Pick a collection to get started</p>
+
+    <div class="cat-grid">
+      <a class="cat" href="#">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop" alt="Ikkat 3‑Piece Sets">
+        <b>Ikkat 3‑Piece Sets</b>
+      </a>
+      <a class="cat" href="#">
+        <img src="https://images.unsplash.com/photo-1581783898377-1266b3fdfcf0?q=80&w=1200&auto=format&fit=crop" alt="Ikkat Cotton Fabric">
+        <b>Ikkat Cotton Fabric</b>
+      </a>
+      <a class="cat" href="#">
+        <img src="https://images.unsplash.com/photo-1604948501466-4e9b4e1a68a1?q=80&w=1200&auto=format&fit=crop" alt="Mercerised Fabric">
+        <b>Mercerised Fabric</b>
+      </a>
+      <a class="cat" href="#">
+        <img src="https://images.unsplash.com/photo-1628971760248-4e7c30e5d5f6?q=80&w=1200&auto=format&fit=crop" alt="Doublekhat Bedsheets">
+        <b>Doublekhat Bedsheets</b>
+      </a>
+    </div>
+  </section>
+
+  <!-- Featured / New Arrivals -->
+  <section class="section">
+    <h2>New Arrivals</h2>
+    <p class="sub">Hot off the loom — limited stock</p>
+
+    <div class="product-grid">
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop" alt="Ikkat Cotton Set — Maroon">
+        <div class="info">
+          <div class="title">Ikkat Cotton Set — Maroon</div>
+          <div class="price">₹1,499</div>
+          <button class="add">Add to Cart</button>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=1200&auto=format&fit=crop" alt="Mercerised Fabric — Indigo">
+        <div class="info">
+          <div class="title">Mercerised Fabric — Indigo</div>
+          <div class="price">₹899 / m</div>
+          <button class="add">Add to Cart</button>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1503342217505-b0a15cf70489?q=80&w=1200&auto=format&fit=crop" alt="Handloom Saree — Coral">
+        <div class="info">
+          <div class="title">Handloom Saree — Coral</div>
+          <div class="price">₹2,499</div>
+          <button class="add">Add to Cart</button>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=1200&auto=format&fit=crop" alt="Bedsheet — Geometric Grey">
+        <div class="info">
+          <div class="title">Bedsheet — Geometric Grey</div>
+          <div class="price">₹1,299</div>
+          <button class="add">Add to Cart</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Offer band -->
+  <section class="section">
+    <div class="offer">
+      <h3>Get ₹500 OFF on orders above ₹1999 — Use code <u>PINK500</u></h3>
+      <div class="cta"><a href="#">Shop the Offer</a></div>
+    </div>
+  </section>
+
+  <!-- Best Sellers -->
+  <section class="section">
+    <h2>Best Sellers</h2>
+    <p class="sub">Customer favorites you’ll love</p>
+    <div class="product-grid">
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1532384816664-01b8b7238f36?q=80&w=1200&auto=format&fit=crop" alt="Ikkat Dupatta">
+        <div class="info">
+          <div class="title">Ikkat Dupatta</div>
+          <div class="price">₹799</div>
+          <button class="add">Add to Cart</button>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1514996937319-344454492b37?q=80&w=1200&auto=format&fit=crop" alt="Cotton Fabric — Sky">
+        <div class="info">
+          <div class="title">Cotton Fabric — Sky</div>
+          <div class="price">₹599 / m</div>
+          <button class="add">Add to Cart</button>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1542060748-10c28b62716b?q=80&w=1200&auto=format&fit=crop" alt="Saree — Classic Black">
+        <div class="info">
+          <div class="title">Saree — Classic Black</div>
+          <div class="price">₹2,799</div>
+          <button class="add">Add to Cart</button>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1503342394121-3e7a74c9aa0b?q=80&w=1200&auto=format&fit=crop" alt="Bedsheet — Coral Tiles">
+        <div class="info">
+          <div class="title">Bedsheet — Coral Tiles</div>
+          <div class="price">₹1,399</div>
+          <button class="add">Add to Cart</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section">
+    <h2>What Customers Say</h2>
+    <p class="sub">Real reviews from happy shoppers</p>
+    <div class="rail">
+      <div class="tcard">
+        <div>“Amazing quality and vibrant colors. The fabric feels premium!”</div>
+        <div class="tname">— Priya S.</div>
+      </div>
+      <div class="tcard">
+        <div>“Exactly like the photos. Fast shipping and great packaging.”</div>
+        <div class="tname">— Rakesh K.</div>
+      </div>
+      <div class="tcard">
+        <div>“Comfortable for daily wear. I’ll be buying more!”</div>
+        <div class="tname">— Aishwarya M.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instagram-style grid -->
+  <section class="section">
+    <h2>Follow us on Instagram</h2>
+    <p class="sub">@looom.shop</p>
+    <div class="ig">
+      <img src="https://images.unsplash.com/photo-1520975922321-8d8a6a0b3b5a?q=80&w=800&auto=format&fit=crop" alt="IG 1">
+      <img src="https://images.unsplash.com/photo-1535632066927-4f43a2a9c9a4?q=80&w=800&auto=format&fit=crop" alt="IG 2">
+      <img src="https://images.unsplash.com/photo-1520975914089-ecf222b41694?q=80&w=800&auto=format&fit=crop" alt="IG 3">
+      <img src="https://images.unsplash.com/photo-1520975915347-58f77d7aaf47?q=80&w=800&auto=format&fit=crop" alt="IG 4">
+      <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=800&auto=format&fit=crop" alt="IG 5">
+      <img src="https://images.unsplash.com/photo-1545529468-42764c2c3aa9?q=80&w=800&auto=format&fit=crop" alt="IG 6">
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <h4>Looom.Shop</h4>
+        <p>Handloom-first marketplace for Ikkat fabrics, sarees and home linen — directly from artisans.</p>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <a href="#">New Arrivals</a>
+        <a href="#">Ikkat Sets</a>
+        <a href="#">Fabrics</a>
+        <a href="#">Bedsheets</a>
+      </div>
+      <div>
+        <h4>Support</h4>
+        <a href="#">Contact</a>
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div>
+        <h4>Get in touch</h4>
+        <a href="mailto:support@looom.shop">support@looom.shop</a>
+        <a href="tel:+919999999999">+91 99999 99999</a>
+        <a href="#">Instagram</a>
+      </div>
+    </div>
+    <div class="copy">© 2025 Looom.Shop — All rights reserved.</div>
+  </footer>
+
+</body>
+</html>
+
